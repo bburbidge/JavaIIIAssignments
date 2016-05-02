@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry including="**/*.java" kind="src" output="target/classes/com/makesrc" path="src/main/java/com.makesrc"/>
+	<classpathentry kind="output" path="target/classes/com/makesrc"/>
+</classpath>
+<!--from Target directory
+ set CLASSPATH=.\classes;%CLASSPATH%>

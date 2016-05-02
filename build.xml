@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="JavaIIIAssignments" default="compile" basedir=".">
+    <property environment="env"/>
+    <property name="Java3Assignments" value="JavaIIIAssignments" />
+    <property name="Creator" value="Brent-Burbidge" />
+    <property name="src" value="${basedir}/src/main/java/com/makesrc" />
+    <property name="bin" value="${basedir}/target" />
+    <property name="lib" value="${basedir}/.idea/libraries" />
+    <property name="doc" value="${basedir}/doc" />
+    <property name="build" value="${basedir}/target/classes" />
+
+    <target name="prepare"
+            description="Setting up temporary directory to support build.">
+        <mkdir dir="${build}"/>
+        <mkdir dir="${bin}"/>
+    </target>
+    <target name="compile" depends="prepare">
+        <javac includeantruntime="false" srcdir="${src}" destdir="${build}"
+               includes="**/*.java" excludes="**/*Test*" listfiles="yes">
+        </javac>
+    </target>
+    <target name="deploy" depends="compile">
+        <jar destfile="${bin}/${Java3Assignments}-by-${Creator}.jar"
+             basedir="${build}"/>
+    </target>
+    <target name ="cleanBuild">
+        <delete includeEmptyDirs="true" verbose="true">
+            <fileset dir="${basedir}">
+                <include name="${build}/**" />
+            </fileset>
+        </delete>
+    </target>
+    <target name ="cleanBin">
+        <delete includeEmptyDirs="true" verbose="true">
+            <fileset dir="${basedir}">
+                <include name="target" />
+            </fileset>
+        </delete>
+    </target>
+    <target name ="cleanAll">
+        <delete includeEmptyDirs="true" verbose="true">
+            <fileset dir="${basedir}">
+                <include name="target" />
+                <include name="target/classes/**" />
+            </fileset>
+        </delete>
+    </target>
+</project>
