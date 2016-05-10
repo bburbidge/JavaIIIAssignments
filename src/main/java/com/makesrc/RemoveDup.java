@@ -2,6 +2,7 @@ package com.makesrc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,71 +10,66 @@ import java.util.regex.Pattern;
 /** Created by Brent Burbidge on 5/1/2016. **/
 public class RemoveDup {
 
-    public static void main(String[] args) {
-        RemoveDup(args[1]);
-    }
+    ///From class
+    private static final String TEXT_FILE_REGEX_STR = "[^*?\"<>]+\\.txt$";
+    private static final Pattern TEXT_FILE_MATCH_PATTERN = Pattern.compile(TEXT_FILE_REGEX_STR);
+    private static final Pattern DUPLICATE_PATTERN = Pattern.compile("((\\b[a-zA-Z0-9]+\\b)(\\S?)" +
+            "(\\s+))((\\2\\S?\\s+)| (\\2\\S?$))+", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+    private static final Matcher DUPLICATE_MATCHER = DUPLICATE_PATTERN.matcher("");
 
-    public static void RemoveDup(String input) {
-        File f = new File(input);
+    ///Main method
+    //    public static void main(String[] args) {
+    //        RemoveDup(args);
+    //    }
+
+    ///From class
+    public static void RemoveDup(String[] args) {
         try {
-            if (f.exists()) {
-                RemoveDupWordsFromText(f);
-            } else {
-                System.out.println("File or Path doesn't exist");
-            }
-        } catch (IOException ex) {
-            System.err.print(ex.getMessage());
+            List<File> fileList = getFileList(args);
+            int totalFilesProcessed = processFiles(fileList);
+            System.out.println("Total Text Files Processed: " + totalFilesProcessed);
+        } catch (Throwable e) {
+            System.err.println("Usage: java RemoveDup <file.txt | startingDir>");
         }
+    }
+
+    ///From class
+    private static int processFiles(List<File> fileList) {
+        int i = 0;
+        for (File f : fileList) {
+            try {
+                System.out.println("Processing: " + f);
+
+                String s = TextUtil.readTextFileToString(f);
+
+                TextUtil.writeStringToTextFile(DUPLICATE_MATCHER.reset(s).replaceAll("$2$3$4"), f);
+                i++;
+            } catch (IOException x) {
+                System.err.println("Failed to process: " + f + " due to " + x);
+            }
+        }
+        return i;
+    }
+
+    ///From class
+    private static List<File> getFileList(String[] args) {
+        if (args.length == 0)
+            throw new IllegalArgumentException("Invalid command line argument!");
+
+        File f = new File(args[0]);
+        List<File> fileList = null;
+
+        if (f.isDirectory()) {
+            fileList = TextUtil.generateFileList(f.getPath(), TEXT_FILE_MATCH_PATTERN);
+        } else {
+            if (f.getName().matches(TEXT_FILE_REGEX_STR)) {
+                fileList = new ArrayList<File>();
+                fileList.add(f);
+            }
+        }
+
+        return fileList;
 
     }
 
-    private static String RemoveDupWordFromString(String input) {
-        String output = "";
-        Pattern p = Pattern.compile("\\b(\\w+)\\b\\s+\\b\\1\\b", Pattern.MULTILINE + Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(input);
-        while (m.find()) {
-            if (output == "") {
-                output = input.replaceFirst(m.group(), m.group(1));
-            } else {
-                output = output.replaceAll(m.group(), m.group(1));
-            }
-        }
-        input = output;
-        m = p.matcher(input);
-        while (m.find()) {
-            output = "";
-            if (output == "") {
-                output = input.replaceAll(m.group(), m.group(1));
-            } else {
-                output = output.replaceAll(m.group(), m.group(1));
-            }
-        }
-
-        return output;
-    }
-
-    private static void RemoveDupWordsFromText(File dir) throws IOException {
-
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; children != null && i < children.length; i++) {
-                RemoveDupWordsFromText(new File(dir, children[i]));
-            }
-        }
-        if (dir.isFile()) {
-            if (dir.getName().trim().endsWith(".txt")) {
-                List<String> contents;
-                contents = TextUtil.readTextFile(dir.getAbsolutePath());
-                if (!contents.isEmpty()) {
-                    for (int i = 0; i < contents.size(); i++) {
-                        contents.set(i, RemoveDupWordFromString(contents.get(i)));
-                    }
-
-                    TextUtil.writeTextFile(contents, dir.getAbsolutePath());
-                }
-            } else {
-                System.out.println(dir + " Not a text file");
-            }
-        }
-    }
 }

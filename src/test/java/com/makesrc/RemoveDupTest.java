@@ -1,9 +1,9 @@
 package com.makesrc;
 
 import org.junit.Assert;
-import org.junit.Assert.*;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -14,12 +14,13 @@ public class RemoveDupTest {
     public void RemoveDupTest()
     {
         try {
-            String input = "This is is a test test of the dup 44 44";
-            String fileName = "UnitTestRemoveDup.txt";
-            TextUtil.writeTextFile(input,fileName);
+            String input = "This is is a test test of the dup 44 44 Test\n" + "This is another line line for test";
+            String[] fileName = new String[1];
+            fileName[0] = "UnitTestRemoveDup.txt";
+            TextUtil.writeStringToTextFile(input, new File(fileName[0]));
             RemoveDup.RemoveDup(fileName);
 
-            List<String> results = TextUtil.readTextFile(fileName);
+            List<String> results = TextUtil.readTextFile(fileName[0]);
             int match =input.compareToIgnoreCase(results.get(0));
             Assert.assertFalse(match==1);
 
