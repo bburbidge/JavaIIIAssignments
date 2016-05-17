@@ -100,5 +100,13 @@ public class Person implements Serializable {
         setPhone(phone);
     }
 
+    void ToXMLUsingDOM() {
+
+    }
+
+    void ToXMLUsingSAX() {
+
+    }
+
 }
 

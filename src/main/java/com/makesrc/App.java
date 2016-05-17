@@ -132,7 +132,7 @@ public class App {
 
     //region Assignment 1 - Generate VCard
     private static void Assignment1() {
-        File avatar = new File("daEAZHH.png");
+        File avatar = new File("vcardpic.png");
         VCard me = new VCard();
         me.setFirstName("Brent");
         me.setLastName("Burbidge");

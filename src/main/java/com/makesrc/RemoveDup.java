@@ -18,9 +18,9 @@ public class RemoveDup {
     private static final Matcher DUPLICATE_MATCHER = DUPLICATE_PATTERN.matcher("");
 
     ///Main method
-    //    public static void main(String[] args) {
-    //        RemoveDup(args);
-    //    }
+    public static void main(String[] args) {
+        RemoveDup(args);
+    }
 
     ///From class
     public static void RemoveDup(String[] args) {

@@ -31,12 +31,16 @@ public class CleanAndSortAddressBook {
         }
     }
 
+    public static void main(String[] args) {
+        CleanAndSortAddressBook(args[0], args[1]);
+    }
+
+    //endregion
+
     //region Property Getters and Setters
     private List<String> getAddresses() {
         return this.addresses;
     }
-
-    //endregion
 
     private void setAddresses(List<String> str) {
         this.addresses = str;
@@ -60,6 +64,7 @@ public class CleanAndSortAddressBook {
             System.out.println(addr.get(i));
         }
     }
+    //endregion
 
     private void WriteAddressesToText(String fileName) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName)))) {
@@ -69,12 +74,6 @@ public class CleanAndSortAddressBook {
             }
         }
     }
-    //endregion
-
-    //    public static void main(String[] args)
-    //    {
-    //        CleanAndSortAddressBook(args[0],args[1]);
-    //    }
 
 }
 
